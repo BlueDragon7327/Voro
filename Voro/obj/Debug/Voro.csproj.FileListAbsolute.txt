@@ -1,0 +1,12 @@
+C:\Users\aarda\source\repos\Voro\Voro\bin\Debug\Voro.exe.config
+C:\Users\aarda\source\repos\Voro\Voro\bin\Debug\Voro.exe
+C:\Users\aarda\source\repos\Voro\Voro\bin\Debug\Voro.pdb
+C:\Users\aarda\source\repos\Voro\Voro\bin\Debug\SaladAPI.dll
+C:\Users\aarda\source\repos\Voro\Voro\obj\Debug\Voro.csproj.AssemblyReference.cache
+C:\Users\aarda\source\repos\Voro\Voro\obj\Debug\Voro.Form1.resources
+C:\Users\aarda\source\repos\Voro\Voro\obj\Debug\Voro.Properties.Resources.resources
+C:\Users\aarda\source\repos\Voro\Voro\obj\Debug\Voro.csproj.GenerateResource.cache
+C:\Users\aarda\source\repos\Voro\Voro\obj\Debug\Voro.csproj.CoreCompileInputs.cache
+C:\Users\aarda\source\repos\Voro\Voro\obj\Debug\Voro.csproj.Up2Date
+C:\Users\aarda\source\repos\Voro\Voro\obj\Debug\Voro.exe
+C:\Users\aarda\source\repos\Voro\Voro\obj\Debug\Voro.pdb
