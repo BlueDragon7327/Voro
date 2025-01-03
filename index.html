@@ -1,1 +1,352 @@
-website soon
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vøro Executor</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        :root {
+            --accent: #808080;
+            --dark: #151515;
+            --card: rgba(30,30,30,0.7);
+        }
+
+        body {
+            background-color: var(--dark);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        #background-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+
+        .glow {
+            position: fixed;
+            width: 50vw;
+            height: 50vw;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+            filter: blur(100px);
+            opacity: 0.1;
+            animation: floatAnimation 20s infinite alternate;
+        }
+
+        .glow:nth-child(1) { top: -25%; left: -25%; }
+        .glow:nth-child(2) { bottom: -25%; right: -25%; animation-delay: -10s; }
+
+        @keyframes floatAnimation {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(50px, 50px) rotate(180deg); }
+        }
+
+        .navbar {
+            background: rgba(20,20,20,0.8);
+            backdrop-filter: blur(20px);
+            padding: 1.5rem;
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-top: none;
+            border-radius: 0 0 20px 20px;
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #fff, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .nav-links a {
+            margin-left: 3rem;
+            text-decoration: none;
+            color: #999;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.4s;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a::before,
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.4s ease;
+        }
+
+        .nav-links a::before { top: 0; left: 0; }
+        .nav-links a::after { bottom: 0; right: 0; }
+
+        .nav-links a:hover {
+            color: #fff;
+        }
+
+        .nav-links a:hover::before,
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 1;
+            padding: 2rem;
+            background: var(--card);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .hero h1 {
+            font-size: 6rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(45deg, #fff, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            position: relative;
+        }
+
+        .hero h1::after {
+            content: attr(data-text);
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: -1;
+            background: linear-gradient(45deg, #fff, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: blur(30px);
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            color: #999;
+            margin-bottom: 3rem;
+            line-height: 1.8;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, var(--accent), #444);
+            color: white;
+            padding: 1.5rem 4rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255,255,255,0.1);
+            transform: rotate(45deg);
+            transition: all 0.4s;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .cta-button:hover::before {
+            transform: rotate(45deg) translateY(-200%);
+        }
+
+        .features {
+            padding: 10rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .features-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+        }
+
+        .feature-card {
+            background: var(--card);
+            backdrop-filter: blur(20px);
+            padding: 3rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--accent);
+        }
+
+        .feature-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .feature-card h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, #fff, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .feature-card p {
+            color: #999;
+            line-height: 1.8;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="glow"></div>
+    <div class="glow"></div>
+    <canvas id="background-canvas"></canvas>
+
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="logo">Vøro</div>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="https://discord.gg/J2m43D7ZS9">Download</a>
+                <a href="#support">Support</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1 data-text="Vøro">Vøro</h1>
+            <p>Unleash unlimited potential with the most powerful Roblox executor ever created.</p>
+            <a href="https://discord.gg/J2m43D7ZS9" class="cta-button">Get Started</a>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3>Supreme Power</h3>
+                <p>Experience unmatched execution capabilities with our next-generation engine.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Elite Scripts</h3>
+                <p>Access our exclusive vault of premium, professionally crafted scripts.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Stealth Mode</h3>
+                <p>Stay undetected with military-grade security and instant updates.</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Three.js Background Animation
+        const canvas = document.getElementById('background-canvas');
+        const renderer = new THREE.WebGLRenderer({ canvas });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 5;
+
+        const geometry = new THREE.PlaneGeometry(10, 10, 50, 50);
+        const material = new THREE.MeshBasicMaterial({
+            color: 0x808080,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.1
+        });
+        const plane = new THREE.Mesh(geometry, material);
+        scene.add(plane);
+
+        function animate() {
+            requestAnimationFrame(animate);
+            plane.rotation.x += 0.002;
+            plane.rotation.y += 0.002;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
