@@ -1,1 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Vøro Executor</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
 
+        :root {
+            --accent: #808080;
+            --dark: #151515;
+            --card: rgba(30,30,30,0.7);
+        }
+
+        body {
+            background-color: var(--dark);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        #background-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+
+        .glow {
+            position: fixed;
+            width: 50vw;
+            height: 50vw;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+            filter: blur(100px);
+            opacity: 0.1;
+            animation: floatAnimation 20s infinite alternate;
+        }
+
+        .glow:nth-child(1) { top: -25%; left: -25%; }
+        .glow:nth-child(2) { bottom: -25%; right: -25%; animation-delay: -10s; }
+
+        @keyframes floatAnimation {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(50px, 50px) rotate(180deg); }
+        }
+
+        .navbar {
+            background: rgba(20,20,20,0.8);
+            backdrop-filter: blur(20px);
+            padding: 1.5rem;
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-top: none;
+            border-radius: 0 0 20px 20px;
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #fff, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .nav-links a {
+            margin-left: 3rem;
+            text-decoration: none;
+            color: #999;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.4s;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .download-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem;
+            position: relative;
+        }
+
+        .download-container {
+            max-width: 1200px;
+            width: 100%;
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            z-index: 1;
+        }
+
+        .download-option {
+            background: var(--card);
+            backdrop-filter: blur(20px);
+            padding: 3rem;
+            border-radius: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+            width: 400px;
+            text-align: center;
+            transition: all 0.4s;
+        }
+
+        .download-option:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent);
+        }
+
+        .download-option h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #fff, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .price {
+            font-size: 3rem;
+            margin: 2rem 0;
+            color: #fff;
+        }
+
+        .features-list {
+            list-style: none;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .features-list li {
+            margin: 1rem 0;
+            color: #999;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .features-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+
+        .download-btn {
+            background: linear-gradient(45deg, var(--accent), #444);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: inline-block;
+            transition: all 0.4s;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .download-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+        }
+
+        .pro-option {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pro-badge {
+            position: absolute;
+            top: 1.5rem;
+            right: -4rem;
+            background: var(--accent);
+            color: white;
+            padding: 0.5rem 4rem;
+            transform: rotate(45deg);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="glow"></div>
+    <div class="glow"></div>
+    <canvas id="background-canvas"></canvas>
+
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="logo">Vøro</div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="#features">Features</a>
+                <a href="#support">Support</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="download-section">
+        <div class="download-container">
+            <div class="download-option">
+                <h2>Lite</h2>
+                <div class="price">Free</div>
+                <ul class="features-list">
+                    <li>78% UNC</li>
+                    <li>Auto Roblox Downgrader</li>
+                    <li>Great for lightweight execution</li>
+                    <li>Quick Updates</li>
+                    <li>Community Support</li>
+                </ul>
+                <a href="https://discord.gg/J2m43D7ZS9" class="download-btn">Download Lite</a>
+            </div>
+
+            <div class="download-option pro-option">
+                <div class="pro-badge">Recommended</div>
+                <h2>Pro</h2>
+                <div class="price">$5.00</div>
+                <ul class="features-list">
+                    <li>100% unc</li>
+                    <li>Premium UI with Themes</li>
+                    <li>Priority Updates</li>
+                    <li>24/7 Premium Support</li>
+                    <li>Script Hub Access</li>
+                </ul>
+                <a href="https://discord.gg/J2m43D7ZS9" class="download-btn">Get Pro</a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Three.js Background Animation
+        const canvas = document.getElementById('background-canvas');
+        const renderer = new THREE.WebGLRenderer({ canvas });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 5;
+
+        const geometry = new THREE.PlaneGeometry(10, 10, 50, 50);
+        const material = new THREE.MeshBasicMaterial({
+            color: 0x808080,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.1
+        });
+        const plane = new THREE.Mesh(geometry, material);
+        scene.add(plane);
+
+        function animate() {
+            requestAnimationFrame(animate);
+            plane.rotation.x += 0.002;
+            plane.rotation.y += 0.002;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
